@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Countdown Timer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="countdown-container">
+        <h1>Set Your Countdown</h1>
+
+        <!-- Date Input -->
+        <input type="datetime-local" id="targetDate" />
+        <button onclick="startCountdown()">Start Countdown</button>
+
+        <!-- Countdown Display -->
+        <div id="countdown" style="display:none;">
+            <div class="time">
+                <span id="days">00</span>
+                <p>Days</p>
+            </div>
+            <div class="time">
+                <span id="hours">00</span>
+                <p>Hours</p>
+            </div>
+            <div class="time">
+                <span id="minutes">00</span>
+                <p>Minutes</p>
+            </div>
+            <div class="time">
+                <span id="seconds">00</span>
+                <p>Seconds</p>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
+<style>
+    body {
+        background-color: #0f172a;
+        color: #f8fafc;
+        font-family: 'Arial', sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+    
+    .countdown-container {
+        text-align: center;
+        max-width: 400px;
+    }
+    
+    h1 {
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+    }
+    
+    input {
+        padding: 8px;
+        border: none;
+        border-radius: 5px;
+        margin-bottom: 10px;
+    }
+    
+    button {
+        padding: 8px 15px;
+        background-color: #3b82f6;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-left: 5px;
+    }
+    
+    button:hover {
+        background-color: #2563eb;
+    }
+    
+    #countdown {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        margin-top: 20px;
+    }
+    
+    .time {
+        background-color: #1e293b;
+        padding: 15px;
+        border-radius: 10px;
+        min-width: 70px;
+    }
+    
+    .time span {
+        font-size: 1.8rem;
+        font-weight: bold;
+        display: block;
+    }
+    
+    .time p {
+        font-size: 0.8rem;
+        margin: 0;
+        color: #94a3b8;
+    }
+    
+</style>
+<script>
+    let countdownInterval;
+
+function startCountdown() {
+    
+    clearInterval(countdownInterval);
+
+    
+    const userDate = document.getElementById("targetDate").value;
+    if (!userDate) {
+        alert("Please select a date and time!");
+        return;
+    }
+
+    const targetTime = new Date(userDate).getTime();
+
+   
+    document.getElementById("countdown").style.display = "flex";
+
+    countdownInterval = setInterval(() => {
+        const now = new Date().getTime();
+        const difference = targetTime - now;
+
+        if (difference <= 0) {
+            clearInterval(countdownInterval);
+            document.getElementById("countdown").innerHTML = "🎉 Time's up!";
+            return;
+        }
+
+        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+        document.getElementById("days").textContent = days.toString().padStart(2, '0');
+        document.getElementById("hours").textContent = hours.toString().padStart(2, '0');
+        document.getElementById("minutes").textContent = minutes.toString().padStart(2, '0');
+        document.getElementById("seconds").textContent = seconds.toString().padStart(2, '0');
+    }, 1000);
+}
+
+</script>
